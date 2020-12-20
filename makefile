@@ -1,0 +1,2 @@
+env:
+	brew install jq
