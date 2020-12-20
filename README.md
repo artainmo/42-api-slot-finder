@@ -1,9 +1,24 @@
 # Script to find slots
 
-1. generate access token with ./generate_access_token.sh
-2. Find slots with ./slot_find ACCESS_TOKEN
+### PREPARE
 
-#Project not found
+* Python3 installed
+
+* Make env
+
+### USE
+Create access-token
+```
+./generate_access_token.sh
+```
+Find slots
+```
+./slot_find ACCESS_TOKEN
+```
+
+
+### OTHER
+##Project not found
 Use src/project_notation_find.sh
 Find the slug value of your project
 The script adds 42cursus- before the input you give
