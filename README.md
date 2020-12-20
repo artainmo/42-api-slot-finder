@@ -20,6 +20,6 @@ Find slots
 ### OTHER
 * Project not found
 ```
-src/project_notation_find.sh
+src/project_notation_find.sh ACCESS_TOKEN
 ```
 Find the slug value of your project. The script adds 42cursus- before the input you give.
