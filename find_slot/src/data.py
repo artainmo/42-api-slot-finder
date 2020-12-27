@@ -38,6 +38,26 @@ for slot in slots:
     print(day + "   " + str(hour) + ":" + min)
 print()
 
+os.system('zenity --warning --text="SLOT FOUND" --no-wrap') #Notify
 #Alarm when slots found
 # while 1:
 #     print('\a')
+
+
+
+class slot_: #Not used slot class, could be used to check when new slots are found by api and thus potentially available
+    def __init__(slot):
+        self.id = slot['id']
+        self.day = int(slot['begin_at'][8:-14])
+        self.hour = int(slot['begin_at'][11:-11])
+        self.min = int(slot['begin_at'][14:-8])
+
+    def __eq__(slot):
+        if self.id == slot.id:
+            return True
+        return False
+
+    def show(first=False):
+        if first == True:
+            print("DAY" + "   " + "TIME")
+        print(str(self.day) + "   " + str(self.hour) + ":" + str(self.min))
