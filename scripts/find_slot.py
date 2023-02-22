@@ -3,9 +3,43 @@ import sys
 import json
 import time
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 1:
     print("Wrong number arguments")
+    print("Give one argument representing your campus' city")
     exit()
+
+ACCESS_TOKEN = os.getenv('API42_ACCESS_TOKEN')
+CAMPUS= sys.argv[1].lower()
+
+match CAMPUS:
+    case "brussels":
+        CAMPUS = "12"
+    case "paris":
+        CAMPUS = "1,42"
+    case "khouribga":
+        CAMPUS = "16"
+    case "lyon":
+        CAMPUS = "9"
+    case "seoul":
+        CAMPUS = "29"
+    case "tokyo":
+        CAMPUS = "26"
+    case "moscow":
+        CAMPUS = "17"
+    case "amman":
+        CAMPUS = "35"
+    case "adelaide:
+        CAMPUS = "36"
+    case "malaga":
+        CAMPUS = "37"
+    case "lisboa":
+        CAMPUS = "38"
+    case "heilborn":
+        CAMPUS = "39"
+    case "urduliz":
+        CAMPUS = "40"
+    case "nice"
+        CAMPUS = "41"
 
 try:
     slots = json.loads(sys.argv[1]) #Set as python dictionary
