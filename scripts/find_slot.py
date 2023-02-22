@@ -2,10 +2,11 @@ import os
 import sys
 import json
 import time
+import requests
 
-if len(sys.argv) != 1:
+if len(sys.argv) != 3:
     print("Wrong number arguments")
-    print("Give one argument representing your campus' city")
+    print("Give one argument representing your campus' city and another your project name.")
     exit()
 
 ACCESS_TOKEN = os.getenv('API42_ACCESS_TOKEN')
@@ -21,7 +22,7 @@ campuses = {
     "tokyo":"26",
     "moscow":"17",
     "amman":"35",
-    "adelaide:"36",
+    "adelaide":"36",
     "malaga":"37",
     "lisboa":"38",
     "heilborn":"39",
@@ -51,29 +52,29 @@ campuses = {
 }
 
 if CAMPUS not in campuses.keys():
-    print("Your campus named " + CAMPUS + " was not found")
-    print("Choose between: " campuses.keys())
+    print("Your campus named '" + CAMPUS + "' was not found")
+    print("Choose between: " + ', '.join(campuses.keys()))
     exit()
 
 def find_slots():
-    url = "https://api.intra.42.fr/v2/projects/"+PROJECT+"/slots?filter[campus_id]="+campuses[CAMPUS]+"&future=true"    
+    url = "https://api.intra.42.fr/v2/projects/"+PROJECT+"/slots?filter[campus_id]="+campuses[CAMPUS]+"&future=true&sort=begin_at"    
     header = { "Authorization" : "Bearer " + ACCESS_TOKEN }
     x = requests.get(url, headers = header)
+    if x.text == "{}":
+        print("Specified project not found.")
+        print("See correct project slug with: 'make project_notation'")
+        exit()
     try:
         slots = json.loads(x.text)
         return slots
     except:
         print("TOKEN EXPIRED REGENEATE NEW TOKEN WITH: 'make setup'")
-        print('\a') #Bell sound
         os.system('zenity --warning --text="TOKEN EXPIRED" --no-wrap') #Notify
         exit()
 
 def print_slots(slots):
     print("DAY" + "   " + "TIME")
-    day = "-1"
     for slot in slots:
-        if day != slot['begin_at'][8:-14]:
-            print()
         day = slot['begin_at'][8:-14]
         hour = int(slot['begin_at'][11:-11])
         hour = 0 if hour == 23 else hour + 1; #Set to Brussels time zone -> Brussels = Z + 1
@@ -83,8 +84,11 @@ def print_slots(slots):
         
 while 1:
     slots = find_slots()
-    if slots.size > 0:
-        print('\a')
+    if slots != []:
+        print_slots(slots)
         os.system('zenity --warning --text="SLOT FOUND" --no-wrap') #Notify        
-    print_slots(slots)
-    time.sleep(60);
+        y = input('Do you want to continue (y/n): ')
+        if y == "n":
+            exit()
+    else:
+        time.sleep(60);
