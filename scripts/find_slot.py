@@ -69,24 +69,28 @@ def find_slots():
         return slots
     except:
         print("TOKEN EXPIRED REGENEATE NEW TOKEN WITH: 'make setup'")
-        os.system('zenity --warning --text="TOKEN EXPIRED" --no-wrap') #Notify
+        os.system('osascript -e \'display notification "TOKEN EXPIRED" with title "FIND SLOT"\'') #Notify
         exit()
 
 def print_slots(slots):
-    print("DAY" + "   " + "TIME")
+    print("START" + "       " + "FINISH")
     for slot in slots:
-        day = slot['begin_at'][8:-14]
-        hour = int(slot['begin_at'][11:-11])
-        hour = 0 if hour == 23 else hour + 1; #Set to Brussels time zone -> Brussels = Z + 1
-        min = slot['begin_at'][14:-8]
-        print(day + "   " + str(hour) + ":" + min)
+        day1 = slot['begin_at'][8:-14]
+        hour1 = int(slot['begin_at'][11:-11])
+        hour1 = 0 if hour1 == 23 else hour1 + 1; #Set to Brussels time zone -> Brussels = Z + 1
+        min1 = slot['begin_at'][14:-8]
+        day2 = slot['end_at'][8:-14]
+        hour2 = int(slot['end_at'][11:-11])
+        hour2 = 0 if hour2 == 23 else hour2 + 1; #Set to Brussels time zone -> Brussels = Z + 1
+        min2 = slot['end_at'][14:-8]
+        print(day1 + "d" + str(hour1) + "h" + min1 + "m   " + day2 + "d" + str(hour2) + "h" + min2 + "m")
     print()
         
 while 1:
     slots = find_slots()
     if slots != []:
         print_slots(slots)
-        os.system('zenity --warning --text="SLOT FOUND" --no-wrap') #Notify        
+        os.system('osascript -e \'display notification "SLOT FOUND!" with title "SLOT FINDER"\'') #Notify        
         y = input('Do you want to continue (y/n): ')
         if y == "n":
             exit()
