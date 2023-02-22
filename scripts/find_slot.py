@@ -9,89 +9,82 @@ if len(sys.argv) != 1:
     exit()
 
 ACCESS_TOKEN = os.getenv('API42_ACCESS_TOKEN')
-CAMPUS= sys.argv[1].lower()
+CAMPUS = sys.argv[1].lower()
+PROJECT = sys.argv[2]
 
-match CAMPUS:
-    case "brussels":
-        CAMPUS = "12"
-    case "paris":
-        CAMPUS = "1,42"
-    case "khouribga":
-        CAMPUS = "16"
-    case "lyon":
-        CAMPUS = "9"
-    case "seoul":
-        CAMPUS = "29"
-    case "tokyo":
-        CAMPUS = "26"
-    case "moscow":
-        CAMPUS = "17"
-    case "amman":
-        CAMPUS = "35"
-    case "adelaide:
-        CAMPUS = "36"
-    case "malaga":
-        CAMPUS = "37"
-    case "lisboa":
-        CAMPUS = "38"
-    case "heilborn":
-        CAMPUS = "39"
-    case "urduliz":
-        CAMPUS = "40"
-    case "nice"
-        CAMPUS = "41"
+campuses = {
+    "brussels":"12",
+    "paris":"1,42",
+    "khouribga":"16",
+    "lyon":"9",
+    "seoul":"29",
+    "tokyo":"26",
+    "moscow":"17",
+    "amman":"35",
+    "adelaide:"36",
+    "malaga":"37",
+    "lisboa":"38",
+    "heilborn":"39",
+    "urduliz":"40",
+    "nice":"41",
+    "abu dhabi":"43",
+    "wolfsburg":"44",
+    "alicante":"45",
+    "barcelona":"46",
+    "lousanne":"47",
+    "mulhouse":"48",
+    "instanbul":"49",
+    "kocaeli":"50",
+    "berlin":"51",
+    "florence":"52",
+    "vienna":"53",
+    "tetouan":"55",
+    "prague":"56",
+    "london":"57",
+    "porto":"58",
+    "luxembourg":"59",
+    "perpignan":"60",
+    "sao paulo":"61",
+    "havre":"62",
+    "antwerp":"63",
+    "singapore":"64"
+}
 
-try:
-    slots = json.loads(sys.argv[1]) #Set as python dictionary
-except:
-    print("TOKEN EXPIRED REGENEATE NEW TOKEN")
-    print('\a')
+if CAMPUS not in campuses.keys():
+    print("Your campus named " + CAMPUS + " was not found")
+    print("Choose between: " campuses.keys())
     exit()
 
-#Test for api call error
-if slots == {}:
-    print("Wrong project notation")
-    exit()
+def find_slots():
+    url = "https://api.intra.42.fr/v2/projects/"+PROJECT+"/slots?filter[campus_id]="+campuses[CAMPUS]+"&future=true"    
+    header = { "Authorization" : "Bearer " + ACCESS_TOKEN }
+    x = requests.get(url, headers = header)
+    try:
+        slots = json.loads(x.text)
+        return slots
+    except:
+        print("TOKEN EXPIRED REGENEATE NEW TOKEN WITH: 'make setup'")
+        print('\a') #Bell sound
+        os.system('zenity --warning --text="TOKEN EXPIRED" --no-wrap') #Notify
+        exit()
 
-#Recursively call slot_find until slot is found
-if slots == []:
-    time.sleep(60);#One minute wait
-    os.system("./slot_find " + sys.argv[2])
-
-print('\a') #Bell for found slot
-
-print("DAY" + "   " + "TIME")
-day = "-1"
-for slot in slots:
-    if day != slot['begin_at'][8:-14]:
-        print()
-    day = slot['begin_at'][8:-14]
-    hour = int(slot['begin_at'][11:-11])
-    hour = 0 if hour == 23 else hour + 1; #Set to Brussels time zone -> Brussels = Z + 1
-    min = slot['begin_at'][14:-8]
-    print(day + "   " + str(hour) + ":" + min)
-print()
-
-os.system('zenity --warning --text="SLOT FOUND" --no-wrap') #Notify
-#Alarm when slots found
-# while 1:
-#     print('\a')
-
-
-
-class slot_: #Not used slot class, could be used to check when new slots are found by api and thus potentially available
-    def __init__(slot):
-        self.id = slot['id']
-        self.day = int(slot['begin_at'][8:-14])
-        self.hour = int(slot['begin_at'][11:-11])
-        self.min = int(slot['begin_at'][14:-8])
-
-    def __eq__(slot):
-        if self.id == slot.id:
-            return True
-        return False
-
-    def show(first=False):
-        if first == True:
-            print("DAY" + "   " + "TIME")
-        print(str(self.day) + "   " + str(self.hour) + ":" + str(self.min))
+def print_slots(slots):
+    print("DAY" + "   " + "TIME")
+    day = "-1"
+    for slot in slots:
+        if day != slot['begin_at'][8:-14]:
+            print()
+        day = slot['begin_at'][8:-14]
+        hour = int(slot['begin_at'][11:-11])
+        hour = 0 if hour == 23 else hour + 1; #Set to Brussels time zone -> Brussels = Z + 1
+        min = slot['begin_at'][14:-8]
+        print(day + "   " + str(hour) + ":" + min)
+    print()
+        
+while 1:
+    slots = find_slots()
+    if slots.size > 0:
+        print('\a')
+        os.system('zenity --warning --text="SLOT FOUND" --no-wrap') #Notify        
+    print_slots(slots)
+    time.sleep(60);
