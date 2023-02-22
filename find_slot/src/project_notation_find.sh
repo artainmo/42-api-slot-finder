@@ -1,8 +1,3 @@
-if [ $# -ne 1 ]; then
-    echo "MISSING ACCESS_TOKEN ARGUMENT"
-    exit
-fi
-
 clear
 printf "Login: "
 read LOGIN
