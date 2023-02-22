@@ -1,28 +1,19 @@
-# Script to find slots
+# 42_slot_finder
 
-42API is used to find slots. Slots found by 42API are only potentially available to you making this script not so useful to actually find slots.
-This project is an example of how to use the 42API.
+Script to find slots via the 42API. Project that needs to be corrected and student campus can be specified.<br>
+Made for mac.
 
-### PREPARE
+### Run
 
-* Python3 installed
-
-* Make env
-
-### USE
-Create access-token
+1. Setup with following command and follow instructions.
 ```
-./generate_access_token.sh
-```
-Find slots
-```
-./slot_find ACCESS_TOKEN
+make setup
 ```
 
+2. Launch
+```
+make CAMPUS=<your-campus-city> PROJECT=<project-to-be-evaluated>
+```
 
-### OTHER
-* Project not found
-```
-src/project_notation_find.sh ACCESS_TOKEN
-```
-Find the slug value of your project. The script adds 42cursus- before the input you give.
+### Problem
+For some reason the found slots do not translate to slots one can actually find on the intranet...
