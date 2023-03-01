@@ -1,7 +1,7 @@
 # 42_slot_finder
 
 Script to find slots via the 42API. Project that needs to be evaluated and student campus can be specified.<br>
-Made for mac
+Made for mac.
 
 ### Run
 
