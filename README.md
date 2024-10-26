@@ -18,5 +18,5 @@ make CAMPUS=<your-campus-city> PROJECT=<project-to-be-evaluated>
 ### Problem
 For some reason the found slots do not translate to slots one can actually find on the intranet...
 
-### Next trial via webscraping static HTML
-[artainmo/42webscraper-find-slots](https://github.com/artainmo/42webscraper-find-slots)
+### Next
+Trial via webscraping static HTML in [artainmo/42-webscraper-slot-finder](https://github.com/artainmo/42-webscraper-slot-finder) project.
